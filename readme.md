@@ -27,4 +27,5 @@ My library aims to make "flag" parsing familiar again, while simplifying it in e
 # references
 
 
+- [kingpin](https://github.com/alecthomas/kingpin)
 
