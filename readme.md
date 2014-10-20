@@ -34,7 +34,7 @@ There are some minor differences in how it handles arguments from standard posix
 
 The code will silently ignore supplied arguments that are invalid.
 
-Finally, the parse returns a `map[string]string` with named keys, which the developer is responsible for casting to needed types.
+Finally, the parse returns a `map[string]interface{}` with named keys, which the developer is responsible for casting to needed types.
 
 
 ## usage
