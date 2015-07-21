@@ -19,32 +19,32 @@ type App struct {
 	options     []Option
 }
 
-func (app *App) help() {
-	if len(app.Description) > 0 {
-		fmt.Printf("[%s]: %s\n\n", os.Args[0], app.Description)
+func (self *App) help() {
+	if len(self.Description) > 0 {
+		fmt.Printf("[%s]: %s\n\n", os.Args[0], self.Description)
 	}
-	if app.options != nil && len(app.options) > 0 {
+	if self.options != nil && len(self.options) > 0 {
 		fmt.Printf("Flags:\n")
 		fmt.Printf("%-30s\t%s\n", "help, -h, --help", "display help information")
-		for _, option := range app.options {
+		for _, option := range self.options {
 			fmt.Printf("%-30s\t%s\n", strings.Join(option.Flags, ", "), option.Description)
 		}
 	}
-	if len(app.examples) > 0 {
+	if len(self.examples) > 0 {
 		fmt.Printf("\nUsage:\n")
-		for _, e := range app.examples {
+		for _, e := range self.examples {
 			fmt.Printf("%s %s\n", os.Args[0], e)
 		}
 	}
 	os.Exit(0)
 }
 
-func (app *App) Flag(name string, description string, flags ...string) {
+func (self *App) Flag(name string, description string, flags ...string) {
 	if len(flags) == 0 {
 		return
 	}
-	if app.options == nil {
-		app.options = make([]Option, 0)
+	if self.options == nil {
+		self.options = make([]Option, 0)
 	}
 	o := Option{Name: name, Description: description, Flags: make([]string, 0)}
 	for _, flag := range flags {
@@ -53,31 +53,31 @@ func (app *App) Flag(name string, description string, flags ...string) {
 		}
 	}
 	if len(o.Flags) > 0 {
-		app.options = append(app.options, o)
+		self.options = append(self.options, o)
 	}
 }
 
-func (app *App) Example(example string) {
+func (self *App) Example(example string) {
 	if len(example) == 0 {
 		return
 	}
-	if app.examples == nil {
-		app.examples = make([]string, 0)
+	if self.examples == nil {
+		self.examples = make([]string, 0)
 	}
-	app.examples = append(app.examples, example)
+	self.examples = append(self.examples, example)
 }
 
-func (app *App) Parse() map[string]interface{} {
-	if !app.NoHelp {
+func (self *App) Parse() map[string]interface{} {
+	if !self.NoHelp {
 		for _, v := range os.Args {
 			if v == "help" || v == "--help" || v == "-h" {
-				app.help()
+				self.help()
 			}
 		}
 	}
 	options := make(map[string]interface{})
 	for idx, arg := range os.Args {
-		for _, option := range app.options {
+		for _, option := range self.options {
 			for _, flag := range option.Flags {
 				if strings.HasPrefix(arg, flag) {
 					if strings.HasPrefix(flag, "--") {
