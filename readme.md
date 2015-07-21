@@ -14,27 +14,23 @@ There is a supplied golang `flag` package that serves the same purpose but with 
 
 ## sales pitch
 
-My library aims to provide the simplest implementation, while at the same time providing POSIX compatible and familiar argument parser handling.
+My library aims to deliver the simplest POSIX compatible implementation.
 
-It's features include:
+It provides you with a container to process your applications expected arguments, and automation of the help command including example usage.  It supports multiple argument keys.
 
-- single container to identify your application and its expected arguments
-- simple argument registration
-- parse method to initiate parsing
-- optional automated help handler with example and description support
-- traditional parsing with single and double dashed arguments (ex. `--key=value || -k value`)
+Invalid arguments will be silently ignored.  Required arguments must be enforced by your own implementation.
+
+The results are provided to you in the form of a `map[string]interface{}`.  A [map tool](https://github.com/cdelorme/go-maps) is available for casting and merging assistance.
 
 It does not:
 
-- have a comprehensive testing suite
-- contain more than 100 lines of code
-- provide wildly extensible abstractions
+- include unit tests
+- use abstractions
+- contain more than 110 lines of code
 
-There are some minor differences in how it handles arguments from standard posix implementations.  It will accept more than one character with single-dash flags.
+It's size makes it possible to effortlessly grasp the implementation, and have the confidence in using it.
 
-The code will silently ignore supplied arguments that are invalid.
-
-Finally, the parse returns a `map[string]interface{}` with named keys, which the developer is responsible for casting to needed types.
+This package can be combined with [go-config](https://github.com/cdelorme/go-config) and [go-env](https://github.com/cdelorme/go-env) to produce a single `map[string]interface{}` of application settings.
 
 
 ## usage
@@ -66,3 +62,4 @@ _Examples will automatically be prefixes with the application name dynamically._
 Finally, you can parse registered flags:
 
     flags := appFlags.Parse()
+
