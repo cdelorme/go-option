@@ -88,7 +88,7 @@ func (self *App) Parse() map[string]interface{} {
 							options[option.Name] = true
 						}
 					} else {
-						if idx+1 < len(os.Args) {
+						if idx+1 < len(os.Args) && !strings.HasPrefix(os.Args[idx+1], "-") {
 							options[option.Name] = os.Args[idx+1]
 						} else {
 							options[option.Name] = true
