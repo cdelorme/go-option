@@ -32,6 +32,8 @@ It's size makes it possible to effortlessly grasp the implementation, and have t
 
 This package can be combined with [go-config](https://github.com/cdelorme/go-config) and [go-env](https://github.com/cdelorme/go-env) to produce a single `map[string]interface{}` of application settings.
 
+_Single dash arguments cannot start with a `-`, therefore `-d -t` will ignore `-t` if it was intended to be the loaded value.  For these cases, use a double-dash argument._
+
 
 ## usage
 
