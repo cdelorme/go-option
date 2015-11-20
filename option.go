@@ -11,7 +11,7 @@ import (
 var stdout io.Writer
 var exit func(int)
 
-type Option struct {
+type op struct {
 	Name        string
 	Description string
 	Flags       []string
@@ -21,7 +21,7 @@ type App struct {
 	NoHelp      bool
 	Description string
 	examples    []string
-	options     []Option
+	options     []op
 }
 
 func init() {
@@ -54,9 +54,9 @@ func (self *App) Flag(name string, description string, flags ...string) {
 		return
 	}
 	if self.options == nil {
-		self.options = make([]Option, 0)
+		self.options = make([]op, 0)
 	}
-	o := Option{Name: name, Description: description, Flags: make([]string, 0)}
+	o := op{Name: name, Description: description, Flags: make([]string, 0)}
 	for _, flag := range flags {
 		if strings.HasPrefix(flag, "-") {
 			o.Flags = append(o.Flags, flag)
