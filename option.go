@@ -2,9 +2,14 @@ package option
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"path"
 	"strings"
 )
+
+var stdout io.Writer
+var exit func(int)
 
 type Option struct {
 	Name        string
@@ -19,28 +24,33 @@ type App struct {
 	options     []Option
 }
 
+func init() {
+	stdout = os.Stdout
+	exit = os.Exit
+}
+
 func (self *App) help() {
 	if len(self.Description) > 0 {
-		fmt.Printf("[%s]: %s\n\n", os.Args[0], self.Description)
+		fmt.Fprintf(stdout, "[%s]: %s\n\n", path.Base(os.Args[0]), self.Description)
 	}
 	if self.options != nil && len(self.options) > 0 {
-		fmt.Printf("Flags:\n")
-		fmt.Printf("%-30s\t%s\n", "help, -h, --help", "display help information")
+		fmt.Fprintf(stdout, "Flags:\n")
+		fmt.Fprintf(stdout, "%-30s\t%s\n", "help, -h, --help", "display help information")
 		for _, option := range self.options {
-			fmt.Printf("%-30s\t%s\n", strings.Join(option.Flags, ", "), option.Description)
+			fmt.Fprintf(stdout, "%-30s\t%s\n", strings.Join(option.Flags, ", "), option.Description)
 		}
 	}
 	if len(self.examples) > 0 {
-		fmt.Printf("\nUsage:\n")
+		fmt.Fprintf(stdout, "\nUsage:\n")
 		for _, e := range self.examples {
-			fmt.Printf("%s %s\n", os.Args[0], e)
+			fmt.Fprintf(stdout, "%s %s\n", path.Base(os.Args[0]), e)
 		}
 	}
-	os.Exit(0)
+	exit(0)
 }
 
 func (self *App) Flag(name string, description string, flags ...string) {
-	if len(flags) == 0 {
+	if len(flags) == 0 || len(name) == 0 {
 		return
 	}
 	if self.options == nil {
@@ -88,10 +98,10 @@ func (self *App) Parse() map[string]interface{} {
 							options[option.Name] = true
 						}
 					} else {
-						if idx+1 < len(os.Args) {
-							options[option.Name] = os.Args[idx+1]
-						} else {
+						if idx+1 == len(os.Args) || strings.HasPrefix(os.Args[idx+1], "-") {
 							options[option.Name] = true
+						} else {
+							options[option.Name] = os.Args[idx+1]
 						}
 					}
 				}
