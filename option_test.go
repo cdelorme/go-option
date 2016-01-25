@@ -3,7 +3,6 @@ package option
 import (
 	"bytes"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/cdelorme/go-maps"
@@ -194,7 +193,7 @@ go-option.test --test
 `
 
 	// compare against expected output
-	if strings.Compare(b.String(), expected) != 0 {
+	if b.String() != expected {
 		t.Log("Help output did not appear as expected...")
 		t.FailNow()
 	}
